@@ -8,7 +8,7 @@ Script: data_Cleaning.R
 
 ## Group 22: What's Trending in Gaming on Bluesky?
 
-```{r config, include = FALSE}
+```{r Config, include = FALSE}
 library(dotenv)
 library(atrrr)
 library(dplyr)
@@ -20,12 +20,11 @@ bsky_handle <- Sys.getenv("BLUESKY_HANDLE")
 bsky_password <- Sys.getenv("BLUESKY_APP_PASSWORD")
 
 auth(user = bsky_handle, password = bsky_password)
-
 load("../data/raw/searchGamingData.RData")
 ```
 
 
-```{r creatingCorpus, echo=FALSE}
+```{r creatingCorpus, echo=FALSE, child="data_collection.rmd"}
 # Convert all post text to a corpus.
 corpus = Corpus(VectorSource(all_skeets_texts))
 
@@ -34,7 +33,7 @@ corpus = tm_map(corpus, function(x) iconv(x, to = "ASCII"))
 
 ```
 
-```{r removeLeaderNames}
+```{r removeWords}
 # Optionally remove names and standard stops words
 corpus = tm_map(
   corpus,

@@ -158,6 +158,7 @@ combinedText = c(
 )
 
 length(combinedText)
+```
 
 #### Save text:
 ```{r saveText, echo=FALSE}
