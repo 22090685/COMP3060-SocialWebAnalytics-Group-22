@@ -118,6 +118,13 @@ limit = 100
 )
 ```
 
+```{r allSkeetsText, echo=FALSE}
+all_skeets_texts = c(
+AA_skeets_texts,
+AT_skeets_texts,
+LW_skeets_texts
+)
+
 ```{r Extract Text, echo=FALSE}
 textGaming = search_skeets_gaming$text
 textVideoGame = search_skeets_videogames$text
@@ -145,9 +152,6 @@ combinedText = c(
 )
 
 length(combinedText)
-
-```
-
 
 #### Save text:
 ```{r saveText, echo=FALSE}
