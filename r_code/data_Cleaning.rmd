@@ -1,0 +1,23 @@
+---
+title: "COMP3020 - Social Web Analysis"
+output: html_document
+author: "Ricky Melo, 22090685"
+Script: data_Cleaning.R
+---
+
+
+## Group 22: What's Trending in Gaming on Bluesky?
+
+```{r config, include = FALSE}
+library(dotenv)
+library(atrrr)
+library(dplyr)
+
+dotenv::load_dot_env("../.env")
+
+bsky_handle <- Sys.getenv("BLUESKY_HANDLE")
+bsky_password <- Sys.getenv("BLUESKY_APP_PASSWORD")
+
+auth(user = bsky_handle, password = bsky_password)
+
+```
