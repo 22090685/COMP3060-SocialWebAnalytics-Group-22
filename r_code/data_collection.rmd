@@ -140,8 +140,6 @@ textXbox = search_skeets_xbox$text
 textSteam = search_skeets_steam$text
 textPC = search_skeets_PC$text
 textIndieGames = search_skeets_indieGames$text
-
-
 ```
 
 #### Combine text:
@@ -158,16 +156,20 @@ combinedText = c(
 )
 
 length(combinedText)
+```
 
 #### Save text:
 ```{r saveText, echo=FALSE}
 save(
+  all_skeets_texts,
   search_skeets_gaming,
   search_skeets_videogames,
   search_skeets_nintendo,
   search_skeets_playstation,
   search_skeets_xbox,
   search_skeets_steam,
+  search_skeets_PC,
+  search_skeets_indieGames,
   file = "../data/raw/searchGamingData.RData"
   )
 ```
