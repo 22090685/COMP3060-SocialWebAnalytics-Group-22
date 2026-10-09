@@ -1,0 +1,54 @@
+---
+title: "COMP3020 - Social Web Analysis"
+output: html_document
+author: "Ricky Melo, 22090685"
+Script: data_collection.R
+---
+
+## Group 22: What's Trending in Gaming on Bluesky?
+
+```{r config, include = FALSE}
+library(dotenv)
+library(atrrr)
+library(dplyr)
+library(wordcloud)
+library(tm)
+
+load("../data/clean/tdm.RData")
+```
+
+#### Word-cloud functions.
+
+```{r unweightedWordCloud, echo=FALSE}
+freqs = rowSums(M)
+freqs = freqs[!is.na(freqs)]
+wordcloud(
+  names(freqs),
+  freqs,
+  random.order = FALSE,
+  min.freq = 10,
+  max.words = 500,
+  colors = brewer.pal(8, "Dark2"),
+  scale = c(2, .5)
+)
+title("Common words in gaming - Unweighted")
+```
+```{r weightedWordCloud, echo=FALSE}
+tdmw = weightTfIdf(tdm)
+T = as.matrix(tdmw)
+
+# Sum weighted frequencies across documents.
+freqsw = rowSums(T)
+wordcloud(
+  names(freqsw),
+  freqsw,
+  random.order = FALSE,
+  min.freq = 6,
+  max.words = 500,
+  colors = brewer.pal(8, "Dark2"),
+  scale = c(1, .5)
+)
+title("Common words in gaming - Weighted")
+```
+
+

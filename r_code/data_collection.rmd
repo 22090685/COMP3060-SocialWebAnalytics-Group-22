@@ -42,8 +42,8 @@ searchTerms <- c(
 search_skeets_gaming = search_skeet(
 "gaming",
 sort = "latest",
-since = "2025-01-01",
-limit = 100
+since = "2026-07-01",
+limit = 500
 )
 ```
 
@@ -52,8 +52,8 @@ limit = 100
 search_skeets_videogames = search_skeet(
 "videogames",
 sort = "latest",
-since = "2025-01-01",
-limit = 100
+since = "2026-07-01",
+limit = 500
 )
 ```
 
@@ -63,8 +63,8 @@ limit = 100
 search_skeets_nintendo = search_skeet(
 "Nintendo",
 sort = "latest",
-since = "2025-01-01",
-limit = 100
+since = "2026-07-01",
+limit = 500
 )
 ```
 
@@ -73,8 +73,8 @@ limit = 100
 search_skeets_playstation = search_skeet(
 "Playstation",
 sort = "latest",
-since = "2025-01-01",
-limit = 100
+since = "2026-07-01",
+limit = 500
 )
 ```
 
@@ -83,8 +83,8 @@ limit = 100
 search_skeets_xbox = search_skeet(
 "Xbox",
 sort = "latest",
-since = "2025-01-01",
-limit = 100
+since = "2026-07-01",
+limit = 500
 )
 ```
 
@@ -93,8 +93,8 @@ limit = 100
 search_skeets_steam = search_skeet(
 "Steam",
 sort = "latest",
-since = "2025-01-01",
-limit = 100
+since = "2026-07-01",
+limit = 500
 )
 ```
 
@@ -103,8 +103,8 @@ limit = 100
 search_skeets_PC = search_skeet(
 "PC",
 sort = "latest",
-since = "2025-01-01",
-limit = 100
+since = "2026-07-01",
+limit = 500
 )
 ```
 
@@ -113,21 +113,8 @@ limit = 100
 search_skeets_indieGames = search_skeet(
 "indie games",
 sort = "latest",
-since = "2025-01-01",
-limit = 100
-)
-```
-
-```{r allSkeetsText, echo=FALSE}
-all_skeets_texts = c(
-  search_skeets_gaming,
-  search_skeets_videogames,
-  search_skeets_nintendo,
-  search_skeets_playstation,
-  search_skeets_xbox,
-  search_skeets_steam,
-  search_skeets_PC,
-  search_skeets_indieGames
+since = "2026-07-01",
+limit = 500
 )
 ```
 
@@ -160,22 +147,10 @@ length(combinedText)
 
 #### Save text:
 ```{r saveText, echo=FALSE}
-save(
-  all_skeets_texts,
-  search_skeets_gaming,
-  search_skeets_videogames,
-  search_skeets_nintendo,
-  search_skeets_playstation,
-  search_skeets_xbox,
-  search_skeets_steam,
-  search_skeets_PC,
-  search_skeets_indieGames,
-  file = "../data/raw/searchGamingData.RData"
-  )
+save(combinedText, file = "../data/raw/searchGamingData.RData")
 ```
 
 #### Load text:
 ```{r loadText, echo=FALSE}
 load("../data/raw/searchGamingData.RData")
 ```
-

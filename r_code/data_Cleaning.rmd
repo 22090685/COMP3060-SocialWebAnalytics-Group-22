@@ -5,60 +5,58 @@ author: "Ricky Melo, 22090685"
 Script: data_Cleaning.R
 ---
 
+## Group 22: What's Trending in Gaming on BlueSky?
 
-## Group 22: What's Trending in Gaming on Bluesky?
-
-```{r Config, include = FALSE}
+```{r config, include = FALSE}
 library(dotenv)
 library(atrrr)
 library(dplyr)
 library(tm)
 
 dotenv::load_dot_env("../.env")
-
-bsky_handle <- Sys.getenv("BLUESKY_HANDLE")
-bsky_password <- Sys.getenv("BLUESKY_APP_PASSWORD")
-
-auth(user = bsky_handle, password = bsky_password)
 load("../data/raw/searchGamingData.RData")
 ```
 
-
-```{r creatingCorpus, echo=FALSE, child="data_collection.rmd"}
+```{r createCorpus, echo=FALSE}
 # Convert all post text to a corpus.
-corpus = Corpus(VectorSource(all_skeets_texts))
+corpus = Corpus(VectorSource(combinedText))
 
 # Convert text to ASCII.
 corpus = tm_map(corpus, function(x) iconv(x, to = "ASCII"))
 
 ```
 
-```{r removeWords}
-# Optionally remove names and standard stops words
-corpus = tm_map(
-  corpus,
-  removeWords,
-  c(
-    stopwords(),
-    "Sony", "Ubisoft",
-    "Nintendo", "Valve",
-    "Xbox", "Microsoft"
-  )
-)
-```
+```{r cleanCorpus, echo=FALSE}
 
-
-# Clean the text while creating the term-document matrix.
-
-``` {r}
-# Remove URLs before punctuation removal.
+# Remove URLs
 remove_urls = content_transformer(function(x) {
   gsub("https?://\\S+|www\\.\\S+", " ", x, perl = TRUE)
 })
 corpus = tm_map(corpus, remove_urls)
 
 
-#Cleaning and Building the Matrix
+# Remove stops words
+corpus = tm_map(
+  corpus,
+  removeWords,
+  c(
+    stopwords(), 
+    # Initial Stop Words
+    "game", "games", "gaming", "gamer", "gamers", "videogame", "videogames", "video", "play", "playing", "played", "player", "players", "playthrough", "gameplay", "gamingcommunity",
+    
+    # Filter out reviews/opinions
+    "review", "reviews", "reviewing", "rated", "rating", "ratings", "recommend", "recommended", "recommendation", "recommendations", "news", "announcement", "announced", "trailer", "trailers", "release", "released", "releasing", "launch", "launched", "coming", "soon", "today", "yesterday", "tomorrow", "new", "old", "best", "worst", "favorite", "favourite", "amazing", "awesome", "great", "good", "bad", "fun", "cool", "nice"
+  )
+)
+
+```
+
+
+# Clean the text while creating the term-document matrix.
+
+``` {r termDocumentMatrix, echo=FALSE}
+
+# Cleaning and Building the Matrix
 tdm = TermDocumentMatrix(
   corpus,
   control = list(
@@ -78,6 +76,18 @@ tdm = tdm[, -empties]
 M = as.matrix(tdm)
 dim(M)
 ```
+#### Save text:
+```{r saveText, echo=FALSE}
+save(
+  M,
+  tdm,
+  file = "../data/clean/tdm.RData"
+  )
+```
 
+#### Load text:
+```{r loadText, echo=FALSE}
+load("../data/clean/tdm.RData")
+```
 
 
