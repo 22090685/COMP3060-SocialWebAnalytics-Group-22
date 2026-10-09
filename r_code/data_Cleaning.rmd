@@ -12,6 +12,7 @@ Script: data_Cleaning.R
 library(dotenv)
 library(atrrr)
 library(dplyr)
+library(tm)
 
 dotenv::load_dot_env("../.env")
 
@@ -20,4 +21,64 @@ bsky_password <- Sys.getenv("BLUESKY_APP_PASSWORD")
 
 auth(user = bsky_handle, password = bsky_password)
 
+load("../data/raw/searchGamingData.RData")
 ```
+
+
+```{r creatingCorpus, echo=FALSE}
+# Convert all post text to a corpus.
+corpus = Corpus(VectorSource(all_skeets_texts))
+
+# Convert text to ASCII.
+corpus = tm_map(corpus, function(x) iconv(x, to = "ASCII"))
+
+```
+
+```{r removeLeaderNames}
+# Optionally remove names and standard stops words
+corpus = tm_map(
+  corpus,
+  removeWords,
+  c(
+    stopwords(),
+    "Sony", "Ubisoft",
+    "Nintendo", "Valve",
+    "Xbox", "Microsoft"
+  )
+)
+```
+
+
+# Clean the text while creating the term-document matrix.
+
+``` {r}
+# Remove URLs before punctuation removal.
+remove_urls = content_transformer(function(x) {
+  gsub("https?://\\S+|www\\.\\S+", " ", x, perl = TRUE)
+})
+corpus = tm_map(corpus, remove_urls)
+
+
+#Cleaning and Building the Matrix
+tdm = TermDocumentMatrix(
+  corpus,
+  control = list(
+  removePunctuation = TRUE,
+  stopwords = TRUE,
+  removeNumbers = TRUE,
+  tolower = TRUE,
+  stemming = TRUE
+  )
+)
+
+# Remove documents left empty by cleaning.
+empties = which(colSums(as.matrix(tdm)) == 0)
+tdm = tdm[, -empties]
+
+# Convert to a standard matrix.
+M = as.matrix(tdm)
+dim(M)
+```
+
+
+
