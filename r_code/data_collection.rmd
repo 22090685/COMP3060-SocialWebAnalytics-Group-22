@@ -124,6 +124,7 @@ AA_skeets_texts,
 AT_skeets_texts,
 LW_skeets_texts
 )
+```
 
 ```{r Extract Text, echo=FALSE}
 textGaming = search_skeets_gaming$text
