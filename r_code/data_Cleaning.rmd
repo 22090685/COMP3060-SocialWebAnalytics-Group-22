@@ -1,0 +1,93 @@
+---
+title: "COMP3020 - Social Web Analysis"
+output: html_document
+author: "Ricky Melo, 22090685"
+Script: data_Cleaning.R
+---
+
+## Group 22: What's Trending in Gaming on BlueSky?
+
+```{r config, include = FALSE}
+library(dotenv)
+library(atrrr)
+library(dplyr)
+library(tm)
+
+dotenv::load_dot_env("../.env")
+load("../data/raw/searchGamingData.RData")
+```
+
+```{r createCorpus, echo=FALSE}
+# Convert all post text to a corpus.
+corpus = Corpus(VectorSource(combinedText))
+
+# Convert text to ASCII.
+corpus = tm_map(corpus, function(x) iconv(x, to = "ASCII"))
+
+```
+
+```{r cleanCorpus, echo=FALSE}
+
+# Remove URLs
+remove_urls = content_transformer(function(x) {
+  gsub("https?://\\S+|www\\.\\S+", " ", x, perl = TRUE)
+})
+corpus = tm_map(corpus, remove_urls)
+
+
+# Remove stops words
+corpus = tm_map(
+  corpus,
+  removeWords,
+  c(
+    stopwords(), 
+    # Initial Stop Words
+    "game", "games", "gaming", "gamer", "gamers", "videogame", "videogames", "video", "play", "playing", "played", "player", "players", "playthrough", "gameplay", "gamingcommunity",
+    
+    # Filter out reviews/opinions
+    "review", "reviews", "reviewing", "rated", "rating", "ratings", "recommend", "recommended", "recommendation", "recommendations", "news", "announcement", "announced", "trailer", "trailers", "release", "released", "releasing", "launch", "launched", "coming", "soon", "today", "yesterday", "tomorrow", "new", "old", "best", "worst", "favorite", "favourite", "amazing", "awesome", "great", "good", "bad", "fun", "cool", "nice"
+  )
+)
+
+```
+
+
+# Clean the text while creating the term-document matrix.
+
+``` {r termDocumentMatrix, echo=FALSE}
+
+# Cleaning and Building the Matrix
+tdm = TermDocumentMatrix(
+  corpus,
+  control = list(
+  removePunctuation = TRUE,
+  stopwords = TRUE,
+  removeNumbers = TRUE,
+  tolower = TRUE,
+  stemming = TRUE
+  )
+)
+
+# Remove documents left empty by cleaning.
+empties = which(colSums(as.matrix(tdm)) == 0)
+tdm = tdm[, -empties]
+
+# Convert to a standard matrix.
+M = as.matrix(tdm)
+dim(M)
+```
+#### Save text:
+```{r saveText, echo=FALSE}
+save(
+  M,
+  tdm,
+  file = "../data/clean/tdm.RData"
+  )
+```
+
+#### Load text:
+```{r loadText, echo=FALSE}
+load("../data/clean/tdm.RData")
+```
+
+

@@ -1,0 +1,156 @@
+---
+title: "COMP3020 - Social Web Analysis"
+output: html_document
+author: "Ricky Melo, 22090685"
+Script: data_collection.R
+---
+
+
+## Group 22: What's Trending in Gaming on Bluesky?
+
+```{r config, include = FALSE}
+library(dotenv)
+library(atrrr)
+library(dplyr)
+
+dotenv::load_dot_env("../.env")
+
+bsky_handle <- Sys.getenv("BLUESKY_HANDLE")
+bsky_password <- Sys.getenv("BLUESKY_APP_PASSWORD")
+
+auth(user = bsky_handle, password = bsky_password)
+
+```
+
+#### Search terms
+```{r searchTerms, echo=FALSE}
+searchTerms <- c(
+  "gaming",
+  "videogames",
+  "Nintendo",
+  "Playstation",
+  "Steam",
+  "PC",
+  "indie games"
+)
+```
+
+### Conduct Search:
+
+#### Gaming:
+```{r searchGaming, echo=FALSE}
+search_skeets_gaming = search_skeet(
+"gaming",
+sort = "latest",
+since = "2026-07-01",
+limit = 500
+)
+```
+
+#### Video games:
+```{r searchVideogames, echo=FALSE}
+search_skeets_videogames = search_skeet(
+"videogames",
+sort = "latest",
+since = "2026-07-01",
+limit = 500
+)
+```
+
+
+#### Nintendo:
+```{r searchNintendo, echo=FALSE}
+search_skeets_nintendo = search_skeet(
+"Nintendo",
+sort = "latest",
+since = "2026-07-01",
+limit = 500
+)
+```
+
+#### Playstation:
+```{r searchPlaystation, echo=FALSE}
+search_skeets_playstation = search_skeet(
+"Playstation",
+sort = "latest",
+since = "2026-07-01",
+limit = 500
+)
+```
+
+#### Xbox:
+```{r searchXbox, echo=FALSE}
+search_skeets_xbox = search_skeet(
+"Xbox",
+sort = "latest",
+since = "2026-07-01",
+limit = 500
+)
+```
+
+#### Steam:
+```{r searchSteam, echo=FALSE}
+search_skeets_steam = search_skeet(
+"Steam",
+sort = "latest",
+since = "2026-07-01",
+limit = 500
+)
+```
+
+#### PC:
+```{r searchPC, echo=FALSE}
+search_skeets_PC = search_skeet(
+"PC",
+sort = "latest",
+since = "2026-07-01",
+limit = 500
+)
+```
+
+#### Indie Games:
+```{r searchIndie, echo=FALSE}
+search_skeets_indieGames = search_skeet(
+"indie games",
+sort = "latest",
+since = "2026-07-01",
+limit = 500
+)
+```
+
+```{r Extract Text, echo=FALSE}
+textGaming = search_skeets_gaming$text
+textVideoGame = search_skeets_videogames$text
+textNintendo = search_skeets_nintendo$text
+textPlaystation = search_skeets_playstation$text
+textXbox = search_skeets_xbox$text
+textSteam = search_skeets_steam$text
+textPC = search_skeets_PC$text
+textIndieGames = search_skeets_indieGames$text
+```
+
+#### Combine text:
+```{r Combine, echo=FALSE}
+combinedText = c(
+  textGaming,
+  textVideoGame,
+  textNintendo,
+  textPlaystation,
+  textXbox,
+  textSteam,
+  textPC,
+  textIndieGames
+)
+
+length(combinedText)
+```
+
+#### Save text:
+```{r saveText, echo=FALSE}
+save(combinedText, file = "../data/raw/searchGamingData.RData")
+```
+
+#### Load text:
+```{r loadText, echo=FALSE}
+load("../data/raw/searchGamingData.RData")
+```
