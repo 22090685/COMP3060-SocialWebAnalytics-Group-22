@@ -1,0 +1,48 @@
+---
+title: "COMP3020 - Social Web Analysis"
+output: html_document
+author: "Ricky Melo, 22090685"
+Script: data_collection.R
+---
+
+
+## Group 22: What's Trending in Gaming on Bluesky?
+
+### Purpose:
+#### 1. Search public Bluesky posts using gaming-related terms.
+#### 2. Collect paginated results within a defined date window.
+#### 3. Save raw API responses and a structured CSV dataset.
+
+
+```{r Load Packages, include = FALSE}
+library(dotenv)
+```
+
+```{r API, include=FALSE}
+handle <- Sys.getenv("BLUESKY_HANDLE")
+password <- Sys.getenv("BLUESSKY_APP_PASSWORD")
+```
+
+
+#### Search terms
+```{r searchTerms, include=FALSE}
+searchTerms <- c(
+  "gaming",
+  "videogames",
+  "Nintendo",
+  "Playstation",
+  "Steam",
+  "PC",
+  "indie games"
+)
+```
+
+
+
+
+
+
+
+
+
+

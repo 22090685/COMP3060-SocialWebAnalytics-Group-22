@@ -20,6 +20,7 @@ Group Repo for group 22 of Social Web Analytics
 ### Requirements
 
 ### Required R packages
+install.packages("dotenv")
 
 ### Running the analysis
 
