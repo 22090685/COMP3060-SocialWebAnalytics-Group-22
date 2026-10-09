@@ -8,24 +8,22 @@ Script: data_collection.R
 
 ## Group 22: What's Trending in Gaming on Bluesky?
 
-### Purpose:
-#### 1. Search public Bluesky posts using gaming-related terms.
-#### 2. Collect paginated results within a defined date window.
-#### 3. Save raw API responses and a structured CSV dataset.
-
-
-```{r Load Packages, include = FALSE}
+```{r config, include = FALSE}
 library(dotenv)
-```
+library(atrrr)
+library(dplyr)
 
-```{r API, include=FALSE}
-handle <- Sys.getenv("BLUESKY_HANDLE")
-password <- Sys.getenv("BLUESSKY_APP_PASSWORD")
-```
+dotenv::load_dot_env("../.env")
 
+bsky_handle <- Sys.getenv("BLUESKY_HANDLE")
+bsky_password <- Sys.getenv("BLUESKY_APP_PASSWORD")
+
+auth(user = bsky_handle, password = bsky_password)
+
+```
 
 #### Search terms
-```{r searchTerms, include=FALSE}
+```{r searchTerms, echo=FALSE}
 searchTerms <- c(
   "gaming",
   "videogames",
@@ -37,12 +35,135 @@ searchTerms <- c(
 )
 ```
 
+### Conduct Search:
+
+#### Gaming:
+```{r searchGaming, echo=FALSE}
+search_skeets_gaming = search_skeet(
+"gaming",
+sort = "latest",
+since = "2025-01-01",
+limit = 100
+)
+```
+
+#### Video games:
+```{r searchVideogames, echo=FALSE}
+search_skeets_videogames = search_skeet(
+"videogames",
+sort = "latest",
+since = "2025-01-01",
+limit = 100
+)
+```
 
 
+#### Nintendo:
+```{r searchNintendo, echo=FALSE}
+search_skeets_nintendo = search_skeet(
+"Nintendo",
+sort = "latest",
+since = "2025-01-01",
+limit = 100
+)
+```
+
+#### Playstation:
+```{r searchPlaystation, echo=FALSE}
+search_skeets_playstation = search_skeet(
+"Playstation",
+sort = "latest",
+since = "2025-01-01",
+limit = 100
+)
+```
+
+#### Xbox:
+```{r searchXbox, echo=FALSE}
+search_skeets_xbox = search_skeet(
+"Xbox",
+sort = "latest",
+since = "2025-01-01",
+limit = 100
+)
+```
+
+#### Steam:
+```{r searchSteam, echo=FALSE}
+search_skeets_steam = search_skeet(
+"Steam",
+sort = "latest",
+since = "2025-01-01",
+limit = 100
+)
+```
+
+#### PC:
+```{r searchPC, echo=FALSE}
+search_skeets_PC = search_skeet(
+"PC",
+sort = "latest",
+since = "2025-01-01",
+limit = 100
+)
+```
+
+#### Indie Games:
+```{r searchIndie, echo=FALSE}
+search_skeets_indieGames = search_skeet(
+"indie games",
+sort = "latest",
+since = "2025-01-01",
+limit = 100
+)
+```
+
+```{r Extract Text, echo=FALSE}
+textGaming = search_skeets_gaming$text
+textVideoGame = search_skeets_videogames$text
+textNintendo = search_skeets_nintendo$text
+textPlaystation = search_skeets_playstation$text
+textXbox = search_skeets_xbox$text
+textSteam = search_skeets_steam$text
+textPC = search_skeets_PC$text
+textIndieGames = search_skeets_indieGames$text
 
 
+```
+
+#### Combine text:
+```{r Combine, echo=FALSE}
+combinedText = c(
+  textGaming,
+  textVideoGame,
+  textNintendo,
+  textPlaystation,
+  textXbox,
+  textSteam,
+  textPC,
+  textIndieGames
+)
+
+length(combinedText)
+
+```
 
 
+#### Save text:
+```{r saveText, echo=FALSE}
+save(
+  search_skeets_gaming,
+  search_skeets_videogames,
+  search_skeets_nintendo,
+  search_skeets_playstation,
+  search_skeets_xbox,
+  search_skeets_steam,
+  file = "../data/raw/searchGamingData.RData"
+  )
+```
 
-
+#### Load text:
+```{r loadText, echo=FALSE}
+load("../data/raw/searchGamingData.RData")
+```
 
