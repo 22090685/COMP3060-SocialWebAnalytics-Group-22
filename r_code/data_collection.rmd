@@ -120,10 +120,16 @@ limit = 100
 
 ```{r allSkeetsText, echo=FALSE}
 all_skeets_texts = c(
-AA_skeets_texts,
-AT_skeets_texts,
-LW_skeets_texts
+  search_skeets_gaming,
+  search_skeets_videogames,
+  search_skeets_nintendo,
+  search_skeets_playstation,
+  search_skeets_xbox,
+  search_skeets_steam,
+  search_skeets_PC,
+  search_skeets_indieGames
 )
+```
 
 ```{r Extract Text, echo=FALSE}
 textGaming = search_skeets_gaming$text
